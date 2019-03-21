@@ -3,7 +3,8 @@ NebliDex BlockHelper is a program designed to index the Neblio blockchain throug
 
 ## Getting Started
 First grab the latest version of Nebliod or Neblio-Qt from the Neblio alpha builds repository: https://neblio-build-staging.ams3.digitaloceanspaces.com/index.html
-If using Neblio-Qt, you must activate the RPC server (not on by default) by setting up a neblio.conf file in your Neblio data folder with an rpcuser, rpcpass, an rpcport of 6326 (which is default) and server=1.
+
+If using Neblio-Qt, you must activate the RPC server (not on by default) by setting up a neblio.conf file in your Neblio data folder with an rpcuser, an rpcpass, an rpcport of 6326 (which is default) and server=1.
 
 Next, wait for Nebliod/Neblio-Qt to completely sync to the Blockchain before running BlockHelper otherwise BlockHelper will tell you to wait till Nebliod is fully synced. Once Nebliod is synced, start BlockHelper and it will begin to index the Blockchain. The indexing process should be quicker than Nebliod indexing but it will still take several hours to complete. The blockchain index file will be a few gigabytes in size (at height 660,000) and will be stored in the blockdata subfolder.
 
@@ -28,7 +29,6 @@ Depending on the exact version of Linux you are running the steps can vary.
 * Build and Run in Terminal
 
 ### Windows
-Depending on the exact version of Linux you are running the steps can vary.
 * Make sure at least .NET Framework 4.5 is installed on your system
 * Find your favorite C# code editor (Visual Studio, SharpDevelop,MonoDevelop)
 * Open Solution
