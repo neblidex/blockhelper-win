@@ -19,10 +19,11 @@ BlockHelper uses Newtonsoft.JSON library (JSON.NET) and SQLite Library Version 3
 * Install Mono Framework (if not already included)
 * Open Solution
 * Build and Run in Terminal
-If you want to create a bundle using mkbundle (see the build script inside the bin folder)
+
+If you want to create a bundle using mkbundle (see the build script inside the bin folder from the Mac repository)
 
 ### Linux
-Depending on the exact version of Linux you are running the steps can vary.
+Depending on the exact distribution of Linux you are running the steps can vary.
 * Install Mono Develop from here: https://www.monodevelop.com/download/#fndtn-download-lin
 * Run code: `sudo apt-get install monodevelop`
 * Open Solution
