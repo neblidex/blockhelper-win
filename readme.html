@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+
+</head>
+
+<body style="font-family: Arial;">
+
+	<div style="text-align: center; margin-left: auto; margin-right: auto; min-width: 600px; width: 75%; margin-bottom: 50px;">
+		<h1><span style="font-size: 28px; color: rgb(66,149,195);">Nebli</span><span style="font-size: 28px; color: rgb(33,70,135); font-weight: bold;">Dex</span> <span style="font-size: 24px;">BlockHelper</span>
+		</h1>
+		<div style="text-align: left; color: rgb(50,50,50); line-height: 24px;">
+			NebliDex BlockHelper is a program designed to index the Neblio blockchain through its interaction with Nebliod or Neblio-Qt. Once indexed, the BlockHelper runs its own RPC (Remote Procedure Call) server that applications can use to obtain Neblio blockchain related transaction and address information. BlockHelper will continue to sync with a synced Nebliod/Neblio-Qt. BlockHelper is designed to be used with NebliDex Critical Nodes but can be used with other applications simultaneously. BlockHelper will only connect to applications on the same computer.
+			<br><h3>Getting Started</h3>
+			First grab the latest version of Nebliod or Neblio-Qt from the Neblio alpha builds repository:
+			<br>
+			<a href="https://neblio-build-staging.ams3.digitaloceanspaces.com/index.html" target="_blank">https://neblio-build-staging.ams3.digitaloceanspaces.com/index.html</a>
+			<br>
+			*If using Neblio-Qt, you must activate the RPC server (not on by default) by setting up a neblio.conf file in your Neblio data folder with an rpcuser, an rpcpass, an rpcport of 6326 (which is default) and server=1.
+			<br><br>
+			Next, wait for Nebliod/Neblio-Qt to completely sync to the Blockchain before running BlockHelper otherwise BlockHelper will tell you to wait till Nebliod is fully synced. Once Nebliod is synced, start BlockHelper and it will begin to index the Blockchain. The indexing process should be quicker than Nebliod indexing but it will still take several hours to complete. The blockchain index file will be a few gigabytes in size (at height 660,000) and will be stored in the blockdata subfolder.
+			<br><br>
+			Once BlockHelper is synced, if using with a NebliDex CN, when you Activate as a CN, it will automatically
+			detect the BlockHelper and show "BlockHelper Active" in the status bar of the NebliDex client if connected.
+			<br><h3>Building NebliDex BlockHelper</h3>
+			NebliDex BlockHelper is built in C# using managed code from the .NET Library on Windows and Mono Framework on Mac and Linux.
+			<br><h4>Mac</h4>
+			<ul>
+				<li>Download Visual Studio for Mac</li>
+				<li>Install Mono Framework (if not already included)</li>
+				<li>Open Solution</li>
+				<li>Build and Run in Terminal</li>
+			</ul>
+			*If you want to create a bundle using mkbundle (see the build script inside the bin folder)
+			<h4>Linux</h4>
+			Depending on the exact version of Linux you are running the steps can vary.
+			<ul>
+				<li>Install Mono Develop following these steps: <a href="https://www.monodevelop.com/download/#fndtn-download-lin" target="_blank">MonoDevelop</a></li>
+				<li>Run code: <strong>sudo apt-get install monodevelop</strong></li>
+				<li>Open Solution</li>
+				<li>Build and Run in Terminal</li>
+			</ul>
+			<h4>Windows</h4>
+			<ul>
+				<li>Make sure at least .NET Framework 4.5 is installed on your system</li>
+				<li>Find your favorite C# code editor (Visual Studio, SharpDevelop,MonoDevelop)</li>
+				<li>Open Solution</li>
+				<li>Build and Run in Terminal</li>
+			</ul>
+			<h3>Querying BlockHelper</h3>
+			The NebliDex BlockHelper accepts messages sent to it from a local computer with the following format:<br><br><strong>Message Length - JSON Encoded Message</strong><br>
+			Message Length = Unsigned Little Endian Int32 (4 bytes) that represents the length of the JSON Encoded Message.<br>
+			JSON Encoded Message = String that represents the request sent to the BlockHelper.
+			<div style="margin-top: 20px; margin-bottom: 20px; background-color: rgb(240,240,250); margin-left: auto; margin-right: auto; text-align: center; padding: 5px;">
+				<h3>RPC Commands</h3>
+				<div style="display:inline-block; width: 50%; height: 30px;">
+					<strong>Request</strong>
+				</div>
+				<div style="display:inline-block; width: 49%; height: 30px;">
+					<strong>Response</strong>
+				</div>
+				<div style="display:inline-block; width: 50%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.serverversion<br>
+					<strong>rpc.response:</strong>0
+				</div>
+				<div style="display:inline-block; width: 49%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.serverversion<br>
+					<strong>rpc.response:</strong>1<br>
+					<strong>rpc.result:</strong>(server version)<br>
+					OR<br>
+					<strong>rpc.error:</strong>(error)<br>
+				</div>	
+				<div style="display:inline-block; width: 50%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.gettransactioninfo<br>
+					<strong>rpc.response:</strong>0<br>
+					<strong>rpc.txhash:</strong>(transaction hash)
+				</div>
+				<div style="display:inline-block; width: 49%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.gettransactioninfo<br>
+					<strong>rpc.response:</strong>1<br>
+					<strong>rpc.result:</strong>(JSON object of transaction)<br>
+					OR<br>
+					<strong>rpc.error:</strong>(error)<br>
+				</div>
+				<div style="display:inline-block; width: 50%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.getaddressinfo<br>
+					<strong>rpc.response:</strong>0<br>
+					<strong>rpc.neb_address:</strong>(neblio address)
+				</div>
+				<div style="display:inline-block; width: 49%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.getaddressinfo<br>
+					<strong>rpc.response:</strong>1<br>
+					<strong>rpc.result:</strong>(JSON Array of UTXOs)<br>
+					OR<br>
+					<strong>rpc.error:</strong>(error)<br>
+				</div>	
+				<div style="display:inline-block; width: 50%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.broadcasttx<br>
+					<strong>rpc.response:</strong>0<br>
+					<strong>rpc.tx_hex:</strong>(transaction raw hex)
+				</div>
+				<div style="display:inline-block; width: 49%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.broadcasttx<br>
+					<strong>rpc.response:</strong>1<br>
+					<strong>rpc.result:</strong>(transaction hash)<br>
+					OR<br>
+					<strong>rpc.error:</strong>(error)<br>
+				</div>
+				<div style="display:inline-block; width: 50%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.getspentaddressinfo<br>
+					<strong>rpc.response:</strong>0<br>
+					<strong>rpc.neb_address:</strong>(neblio address)<br>
+					<strong>rpc.max_utxo:</strong>(max number of spent TXOs to query, max is 1000)
+				</div>
+				<div style="display:inline-block; width: 49%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.getspentaddressinfo<br>
+					<strong>rpc.response:</strong>1<br>
+					<strong>rpc.result:</strong>(JSON Array of UTXOs)<br>
+					OR<br>
+					<strong>rpc.error:</strong>(error)<br>
+				</div>	
+				<div style="display:inline-block; width: 50%; height: 180px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.createntp1transaction<br>
+					<strong>rpc.response:</strong>0<br>
+					<strong>rpc.source_address:</strong>(neblio address source)<br>
+					<strong>rpc.to_addresses:</strong>(JSON Array that represents all the target addresses, similar to API)<br>
+				</div>
+				<div style="display:inline-block; width: 49%; height: 180px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.createntp1transaction<br>
+					<strong>rpc.response:</strong>1<br>
+					<strong>rpc.result:</strong>(JSON object with information on how to create a transaction)<br>
+					OR<br>
+					<strong>rpc.error:</strong>(error)<br>
+				</div>
+				<div style="display:inline-block; width: 50%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.getblockheight<br>
+					<strong>rpc.response:</strong>0<br>
+				</div>
+				<div style="display:inline-block; width: 49%; height: 130px; text-align: left; vertical-align: top; border-top: 1px solid black;">
+					<strong>rpc.method:</strong>rpc.getblockheight<br>
+					<strong>rpc.response:</strong>1<br>
+					<strong>rpc.result:</strong>(BlockHelper current block height)<br>
+					OR<br>
+					<strong>rpc.error:</strong>(error)<br>
+				</div>		
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
