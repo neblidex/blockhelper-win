@@ -39,5 +39,7 @@ Depending on the exact distribution of Linux you are running the steps can vary.
 See readme.html for information on how to query the BlockHelper
 
 ## Release Notes
+### 1.0.1
+Modified to allow multiple Neblio-based tokens of the same type in one UTXO to be valid
 ### 1.0.0
 This is the initial release of the NebliDex BlockHelper
