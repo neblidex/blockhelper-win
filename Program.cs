@@ -37,7 +37,7 @@ namespace BlockHelper
 	public partial class Program
 	{
 		public static string App_Path = AppDomain.CurrentDomain.BaseDirectory;
-		public static string version_text = "1.0.0"; //First version of NebliDex Helper
+		public static string version_text = "1.0.1"; //First version of NebliDex Helper
 		public static int database_version = 1;
 		public static FileStream lockfile = null;
 		public static EventWaitHandle exit_event;
@@ -1112,19 +1112,49 @@ namespace BlockHelper
 			for(int i = 0;i < token_types.Count;i++){
 				bool match = false;
 				foreach (JObject utxo in unordered_utxos) {
-					foreach (JObject token in utxo["tokens"]) {
-						//Go through the list of tokens in this UTXO, only look at the first token
-						if(token["tokenId"].ToString() == token_types[i]){
-							match = true;
-							if(tokeninput_amounts.ContainsKey(token_types[i]) == false){
-								tokeninput_amounts[token_types[i]] = Convert.ToInt64(token["amount"].ToString());
-							}else{
-								tokeninput_amounts[token_types[i]] += Convert.ToInt64(token["amount"].ToString()); //Get the amount of this token type
-							}
-							ordered_utxos.Add(utxo);
-						}
-						break;
-					}
+                    bool token_present = false;
+                    int token_count = 0;
+                    foreach (JObject token in utxo["tokens"])
+                    {
+                        //Go through the list of tokens in this UTXO, may have duplicate tokens
+                        if (token["tokenId"].ToString() == token_types[i])
+                        {
+                            token_present = true;
+                            match = true;
+                            if (tokeninput_amounts.ContainsKey(token_types[i]) == false)
+                            {
+                                tokeninput_amounts[token_types[i]] = Convert.ToInt64(token["amount"].ToString());
+                            }
+                            else
+                            {
+                                tokeninput_amounts[token_types[i]] += Convert.ToInt64(token["amount"].ToString()); //Get the amount of this token type
+                            }
+                        }
+                        token_count++;
+                    }
+                    if (token_present == true)
+                    {
+                        if (token_count > 1)
+                        {
+                            // More than 1 token at this UTXO, check whether they are mixed tokens (shouldn't happen normally)
+                            string firstToken = "";
+                            foreach (JObject token in utxo["tokens"])
+                            {
+                                if (firstToken.Length == 0)
+                                {
+                                    firstToken = token["tokenId"].ToString();
+                                }
+                                else
+                                {
+                                    if (firstToken.Equals(token["tokenId"].ToString()) == false)
+                                    {                                    
+                                        return null;
+                                    }
+                                }
+                            }
+                        }
+                        ordered_utxos.Add(utxo); // Our desired token is in UTXO, add the UTXO in order
+                    }
 				}
 				if(match == false){
 					return null; //This means for this token type, it couldn't find a corresponding UTXO
